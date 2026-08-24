@@ -119,6 +119,114 @@
             width: 280px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+
+        /* Exercise Styles */
+        .exercise-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .exercise-title {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--secondary);
+            background: #f0f7fc;
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--accent) !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24 !important;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .feedback.correct-bg {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect-bg {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .score-board {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-reset {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-reset:hover {
+            opacity: 0.9;
+        }
+
+        .exercise-diagram {
+            text-align: center;
+            margin: 15px 0;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+        }
     </style>
 </head>
 <body>
@@ -129,7 +237,7 @@
     <!-- Pestañas de Navegación -->
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab('guia')">Guía & Tips</button>
-        <button class="tab-btn" onclick="openTab('ejercicios')">Ejercicios</button>
+        <button class="tab-btn" onclick="openTab('ejercicios')">Ejercicios Interactivos</button>
     </div>
 
     <!-- TAB 1: GUÍA Y TIPS -->
@@ -220,17 +328,125 @@
         </div>
     </div>
 
-    <!-- TAB 2: EJERCICIOS -->
+    <!-- TAB 2: EJERCICIOS INTERACTIVOS -->
     <div id="ejercicios" class="tab-content">
-        <h2>Práctica Guiada</h2>
-        <p>Selecciona las respuestas correctas para poner a prueba tu conocimiento:</p>
-        <div class="tip-box">
-            <p><i>Contenido de los ejercicios interactivos de tu plataforma...</i></p>
+        
+        <!-- Marcador de Puntaje -->
+        <div class="score-board">
+            <div>
+                <strong>Puntaje: </strong><span id="score">0</span> / <span id="total-q">4</span>
+            </div>
+            <button class="btn-reset" onclick="resetQuiz()">Reiniciar Ejercicios</button>
         </div>
+
+        <!-- Ejercicio 1 -->
+        <div class="exercise-card" id="ex-1">
+            <div class="exercise-title">Ejercicio 1: Identificación de Catetos</div>
+            <p>Observa el triángulo con el ángulo $\theta$ en la esquina inferior derecha. ¿Cuál es el <strong>Cateto Opuesto (CO)</strong> y el <strong>Cateto Adyacente (CA)</strong> respecto a $\theta$?</p>
+            
+            <div class="exercise-diagram">
+                <svg width="240" height="160" viewBox="0 0 240 160">
+                    <polygon points="40,130 200,130 40,30" fill="#f8f9fa" stroke="#2c3e50" stroke-width="3"/>
+                    <rect x="40" y="115" width="15" height="15" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                    <path d="M 170,130 A 30,30 0 0,0 158,108" fill="none" stroke="#3498db" stroke-width="3"/>
+                    <text x="148" y="123" font-size="14" fill="#3498db" font-weight="bold">θ</text>
+                    
+                    <text x="20" y="80" font-size="13" fill="#2c3e50" font-weight="bold">A</text>
+                    <text x="115" y="150" font-size="13" fill="#2c3e50" font-weight="bold">B</text>
+                    <text x="125" y="70" font-size="13" fill="#8e44ad" font-weight="bold">C</text>
+                </svg>
+            </div>
+
+            <div class="options-group">
+                <button class="option-btn" onclick="checkAnswer(1, 'A', false)">CO = B, CA = A</button>
+                <button class="option-btn" onclick="checkAnswer(1, 'B', true)">CO = A, CA = B</button>
+                <button class="option-btn" onclick="checkAnswer(1, 'C', false)">CO = C, CA = B</button>
+                <button class="option-btn" onclick="checkAnswer(1, 'D', false)">CO = A, CA = C</button>
+            </div>
+            <div class="feedback" id="feedback-1"></div>
+        </div>
+
+        <!-- Ejercicio 2 -->
+        <div class="exercise-card" id="ex-2">
+            <div class="exercise-title">Ejercicio 2: Selección de Fórmula</div>
+            <p>Quieres calcular la altura ($h$) de un árbol. Conoces la distancia desde la base al observador ($12\text{ m}$) y el ángulo de elevación ($\theta = 35^\circ$). ¿Qué fórmula debes emplear?</p>
+            
+            <div class="exercise-diagram">
+                <svg width="260" height="150" viewBox="0 0 260 150">
+                    <polygon points="40,120 220,120 40,30" fill="#eaf2f8" stroke="#2c3e50" stroke-width="2" stroke-dasharray="4"/>
+                    <line x1="40" y1="30" x2="40" y2="120" stroke="#e74c3c" stroke-width="4"/>
+                    <path d="M 190,120 A 30,30 0 0,0 178,98" fill="none" stroke="#3498db" stroke-width="3"/>
+                    <text x="165" y="113" font-size="13" fill="#3498db" font-weight="bold">35°</text>
+                    <text x="15" y="80" font-size="13" fill="#e74c3c" font-weight="bold">h = ?</text>
+                    <text x="110" y="140" font-size="13" fill="#27ae60" font-weight="bold">12 m</text>
+                </svg>
+            </div>
+
+            <div class="options-group">
+                <button class="option-btn" onclick="checkAnswer(2, 'A', false)">Seno: $\text{Sen}(35^\circ) = \frac{h}{12}$</button>
+                <button class="option-btn" onclick="checkAnswer(2, 'B', false)">Coseno: $\text{Cos}(35^\circ) = \frac{12}{h}$</button>
+                <button class="option-btn" onclick="checkAnswer(2, 'C', true)">Tangente: $\text{Tan}(35^\circ) = \frac{h}{12}$</button>
+                <button class="option-btn" onclick="checkAnswer(2, 'D', false)">Teorema de Pitágoras: $c^2 = a^2 + b^2$</button>
+            </div>
+            <div class="feedback" id="feedback-2"></div>
+        </div>
+
+        <!-- Ejercicio 3 -->
+        <div class="exercise-card" id="ex-3">
+            <div class="exercise-title">Ejercicio 3: Teorema de Pitágoras vs Trigonometría</div>
+            <p>Un triángulo rectángulo tiene catetos de $6\text{ cm}$ y $8\text{ cm}$. Se necesita hallar la longitud de la hipotenusa ($c$). ¿Qué método es el más directo?</p>
+            
+            <div class="exercise-diagram">
+                <svg width="220" height="150" viewBox="0 0 220 150">
+                    <polygon points="40,120 180,120 40,30" fill="#f8f9fa" stroke="#2c3e50" stroke-width="3"/>
+                    <rect x="40" y="105" width="15" height="15" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                    <text x="20" y="80" font-size="13" fill="#2c3e50" font-weight="bold">6 cm</text>
+                    <text x="100" y="140" font-size="13" fill="#2c3e50" font-weight="bold">8 cm</text>
+                    <text x="115" y="70" font-size="13" fill="#8e44ad" font-weight="bold">c = ?</text>
+                </svg>
+            </div>
+
+            <div class="options-group">
+                <button class="option-btn" onclick="checkAnswer(3, 'A', true)">Pitágoras: $c = \sqrt{6^2 + 8^2} = 10\text{ cm}$</button>
+                <button class="option-btn" onclick="checkAnswer(3, 'B', false)">SOH: $\text{Sen}(\theta) = \frac{6}{8}$</button>
+                <button class="option-btn" onclick="checkAnswer(3, 'C', false)">TOA: $\text{Tan}(\theta) = \frac{8}{6}$</button>
+                <button class="option-btn" onclick="checkAnswer(3, 'D', false)">CAH: $\text{Cos}(\theta) = \frac{6}{10}$</button>
+            </div>
+            <div class="feedback" id="feedback-3"></div>
+        </div>
+
+        <!-- Ejercicio 4 -->
+        <div class="exercise-card" id="ex-4">
+            <div class="exercise-title">Ejercicio 4: Ángulo en la parte Superior</div>
+            <p>Si el ángulo $\theta$ se ubica en el **vértice superior** del triángulo, ¿cuál es la razón trigonométrica para calcular la base ($x$) teniendo la hipotenusa ($15\text{ m}$)?</p>
+
+            <div class="exercise-diagram">
+                <svg width="220" height="160" viewBox="0 0 220 160">
+                    <polygon points="50,130 190,130 50,30" fill="#f8f9fa" stroke="#2c3e50" stroke-width="3"/>
+                    <rect x="50" y="115" width="15" height="15" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                    <path d="M 50,60 A 30,30 0 0,0 72,47" fill="none" stroke="#e67e22" stroke-width="3"/>
+                    <text x="62" y="65" font-size="14" fill="#e67e22" font-weight="bold">θ</text>
+                    <text x="110" y="150" font-size="13" fill="#e74c3c" font-weight="bold">x (base)</text>
+                    <text x="130" y="75" font-size="13" fill="#8e44ad" font-weight="bold">15 m</text>
+                </svg>
+            </div>
+
+            <div class="options-group">
+                <button class="option-btn" onclick="checkAnswer(4, 'A', true)">Seno: $\text{Sen}(\theta) = \frac{x}{15}$ (ya que $x$ es el Opuesto a $\theta$)</button>
+                <button class="option-btn" onclick="checkAnswer(4, 'B', false)">Coseno: $\text{Cos}(\theta) = \frac{x}{15}$ (ya que $x$ es el Adyacente a $\theta$)</button>
+                <button class="option-btn" onclick="checkAnswer(4, 'C', false)">Tangente: $\text{Tan}(\theta) = \frac{15}{x}$</button>
+                <button class="option-btn" onclick="checkAnswer(4, 'D', false)">Seno: $\text{Sen}(\theta) = \frac{15}{x}$</button>
+            </div>
+            <div class="feedback" id="feedback-4"></div>
+        </div>
+
     </div>
 </div>
 
 <script>
+    let score = 0;
+    const answered = {1: false, 2: false, 3: false, 4: false};
+
     function openTab(tabName) {
         let i;
         let tabContent = document.getElementsByClassName("tab-content");
@@ -243,6 +459,63 @@
         }
         document.getElementById(tabName).classList.add("active");
         event.currentTarget.classList.add("active");
+    }
+
+    function checkAnswer(exerciseNum, option, isCorrect) {
+        if (answered[exerciseNum]) return; // Evitar re-responder
+
+        const card = document.getElementById(`ex-${exerciseNum}`);
+        const buttons = card.querySelectorAll('.option-btn');
+        const feedback = document.getElementById(`feedback-${exerciseNum}`);
+
+        buttons.forEach(btn => {
+            btn.style.pointerEvents = 'none'; // Deshabilitar botones
+        });
+
+        if (isCorrect) {
+            event.target.classList.add('correct');
+            feedback.className = "feedback correct-bg";
+            feedback.innerHTML = "<strong>¡Correcto! 🎉</strong> ";
+            
+            if (exerciseNum === 1) feedback.innerHTML += "El lado A está al frente de θ (Opuesto) y el lado B está al lado (Adyacente).";
+            if (exerciseNum === 2) feedback.innerHTML += "Conoces el Adyacente (12 m) y buscas el Opuesto (h). La razón que los relaciona es Tangente (TOA).";
+            if (exerciseNum === 3) feedback.innerHTML += "Al no requerir ángulos, el Teorema de Pitágoras es directo: √(6² + 8²) = √(36 + 64) = √100 = 10 cm.";
+            if (exerciseNum === 4) feedback.innerHTML += "Al estar θ arriba, el lado opuesto es la base (x). Seno = Opuesto / Hipotenusa.";
+
+            score++;
+            document.getElementById('score').innerText = score;
+        } else {
+            event.target.classList.add('incorrect');
+            feedback.className = "feedback incorrect-bg";
+            feedback.innerHTML = "<strong>Incorrecto. ❌</strong> ";
+
+            if (exerciseNum === 1) feedback.innerHTML += "Recuerda: El cateto opuesto es el que está directamente al frente del ángulo θ.";
+            if (exerciseNum === 2) feedback.innerHTML += "Relacionas Opuesto ($h$) y Adyacente ($12\text{ m}$). Mnemotecnia TOA &rarr; Tangente.";
+            if (exerciseNum === 3) feedback.innerHTML += "Como solo tienes lados y no hay ángulos dados, debes usar Pitágoras.";
+            if (exerciseNum === 4) feedback.innerHTML += "Al cambiar la posición del ángulo arriba, la base pasa a ser su lado Opuesto.";
+        }
+
+        feedback.style.display = "block";
+        answered[exerciseNum] = true;
+    }
+
+    function resetQuiz() {
+        score = 0;
+        document.getElementById('score').innerText = score;
+        
+        for (let i = 1; i <= 4; i++) {
+            answered[i] = false;
+            const card = document.getElementById(`ex-${i}`);
+            const buttons = card.querySelectorAll('.option-btn');
+            const feedback = document.getElementById(`feedback-${i}`);
+
+            buttons.forEach(btn => {
+                btn.className = 'option-btn';
+                btn.style.pointerEvents = 'auto';
+            });
+
+            feedback.style.display = 'none';
+        }
     }
 </script>
 
