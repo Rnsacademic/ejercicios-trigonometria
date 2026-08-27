@@ -261,6 +261,7 @@
         <button class="tab-btn active" onclick="openTab('guia', this)">Guía de estudio</button>
         <button class="tab-btn" onclick="openTab('practica', this)">Práctica interactiva</button>
         <button class="tab-btn" onclick="openTab('desarrollo', this)">Respuesta corta y desarrollo</button>
+        <button class="tab-btn" onclick="openTab('extra', this)">Práctica extra</button>
     </div>
 
     <section id="guia" class="tab-content active">
@@ -397,6 +398,41 @@
             </div>
         </div>
     </section>
+
+    <section id="extra" class="tab-content">
+        <div class="card">
+            <h2>Práctica extra basada en la guía de clase</h2>
+            <p>Esta sección agrega ejercicios muy parecidos al formato trabajado en clase: vocabulario de TV programmes, presente simple, tercera persona, DO/DOES, lectura y producción escrita.</p>
+        </div>
+
+        <div class="section-banner"><h2>A. TV Programmes</h2><p>Choose the correct TV programme.</p></div>
+        <div id="extra-vocab"></div>
+
+        <div class="section-banner"><h2>B. Present Simple</h2><p>Choose the correct affirmative or negative form.</p></div>
+        <div id="extra-grammar"></div>
+
+        <div class="section-banner"><h2>C. Third Person Singular</h2><p>Choose the correct HE / SHE / IT form.</p></div>
+        <div id="extra-third"></div>
+
+        <div class="section-banner"><h2>D. DO / DOES Questions</h2><p>Choose the correctly formed question.</p></div>
+        <div id="extra-questions"></div>
+
+        <div class="section-banner"><h2>E. Reading - TV Guide</h2></div>
+        <div class="reading">
+            <strong>Eddy:</strong> I want to watch TV.<br>
+            <strong>Victor:</strong> Let me check the TV guide first. There is a comedy, a soap opera, a game show and a western.<br>
+            <strong>Eddy:</strong> What's the name of the game show?<br>
+            <strong>Victor:</strong> It's <em>The Big Winner</em>.<br>
+            <strong>Eddy:</strong> I don't like it. What's on channel 5?<br>
+            <strong>Victor:</strong> There's a reality show, but later the news and a sports programme are on.<br>
+            <strong>Eddy:</strong> What time is the sports programme?<br>
+            <strong>Victor:</strong> It's at 9:00 p.m.<br>
+            <strong>Eddy:</strong> All right. I want to watch it. In the meantime, why don't we continue with the TV series?<br>
+            <strong>Victor:</strong> Sounds good! Let's prepare some popcorn!
+        </div>
+        <div id="extra-reading"></div>
+    </section>
+
 </div>
 
 <script>
@@ -664,7 +700,112 @@ function openTab(tabName, button) {
     button.classList.add("active");
 }
 
-window.onload = renderQuiz;
+window.onload = function(){ renderQuiz(); renderExtra(); };
+
+const extraData = {
+  vocab: [
+    ["You can see animals in this TV programme.", ["Documentary","Game show","Soap opera","Talk show"], 0, "Documentary is correct."],
+    ["People play games for money in this TV programme.", ["Sports programme","Game show","The news","Crime series"], 1, "Game show is correct."],
+    ["You can see a family and their neighbours in many episodes.", ["Soap opera","Documentary","Sports programme","Talk show"], 0, "Soap opera is correct."],
+    ["You can see people playing basketball.", ["Comedy show","Sports programme","Reality TV show","The news"], 1, "Sports programme is correct."],
+    ["You watch this to know what is happening in the world.", ["The news","Game show","Comedy show","Soap opera"], 0, "The news is correct."],
+    ["Famous people are interviewed in this programme.", ["Talk show","Crime series","Documentary","Sports programme"], 0, "Talk show is correct."],
+    ["You can see people living their lives.", ["Reality TV show","The news","Comedy show","Sports programme"], 0, "Reality TV show is correct."],
+    ["You can see police officers and criminals.", ["Crime series","Game show","Talk show","Documentary"], 0, "Crime series is correct."],
+    ["This TV programme is very funny.", ["Comedy show","The news","Documentary","Sports programme"], 0, "Comedy show is correct."]
+  ],
+  grammar: [
+    ["Robert ______ twenty-five pounds a week. (earn)", ["earn","earns","earning","don't earn"], 1, "Robert = he, so earns."],
+    ["Denia ______ beautiful pictures. (paint)", ["paints","paint","painting","doesn't paints"], 0, "Denia = she, so paints."],
+    ["She ______ to come here. (not/want)", ["don't want","doesn't want","doesn't wants","not wants"], 1, "Use doesn't + base verb."],
+    ["They ______ to buy a television set. (want)", ["wants","want","doesn't want","wanting"], 1, "They + base verb."],
+    ["It ______ two hours to get there. (take)", ["take","takes","taking","don't take"], 1, "It + takes."],
+    ["This sweater ______ four pounds. (not/cost)", ["don't cost","doesn't cost","doesn't costs","not cost"], 1, "Use doesn't cost."],
+    ["Ted and his friends ______ football well. (not/play)", ["doesn't play","don't play","don't plays","not play"], 1, "They + don't play."],
+    ["Miriam ______ too much time with him. (spend)", ["spend","spends","spending","doesn't spends"], 1, "Miriam = she, so spends."],
+    ["Stan ______ to the BBC regularly. (listen)", ["listen","listens","listening","don't listen"], 1, "Stan = he, so listens."],
+    ["Linda ______ German fluently. (not/speak)", ["don't speak","doesn't speak","doesn't speaks","not speaks"], 1, "Linda = she, so doesn't speak."]
+  ],
+  third: [
+    ["He ______ at a bank. (work)", ["work","works","workes","working"], 1, "work → works"],
+    ["She ______ English every afternoon. (study)", ["studys","study","studies","studyies"], 2, "study → studies"],
+    ["My father ______ to work at 7:00. (go)", ["gos","goes","go","going"], 1, "go → goes"],
+    ["The boy ______ TV after school. (watch)", ["watchs","watches","watch","watchies"], 1, "watch → watches"],
+    ["Maria ______ her car on Saturdays. (wash)", ["washs","washes","wash","washies"], 1, "wash → washes"],
+    ["The plane ______ over the city. (fly)", ["flys","flies","flyes","fly"], 1, "fly → flies"],
+    ["He ______ his mother before school. (kiss)", ["kiss","kisss","kisses","kissies"], 2, "kiss → kisses"],
+    ["My sister ______ volleyball every week. (play)", ["plaies","plays","playes","play"], 1, "play → plays"]
+  ],
+  questions: [
+    ["(you / like cake?)", ["Do you like cake?","Does you like cake?","Do you likes cake?","You do like cake?"], 0, "Do + you + base verb."],
+    ["(your mother / live in Aserrí?)", ["Do your mother live in Aserrí?","Does your mother lives in Aserrí?","Does your mother live in Aserrí?","Your mother does live in Aserrí?"], 2, "Does + mother + live."],
+    ["(students / hate study?)", ["Does students hate study?","Do students hate study?","Do students hates study?","Students do hate study?"], 1, "Do + students + hate."],
+    ["(Peter / drink tea every morning?)", ["Does Peter drink tea every morning?","Do Peter drink tea every morning?","Does Peter drinks tea every morning?","Peter does drink tea every morning?"], 0, "Does + Peter + drink."],
+    ["(we / smoke?)", ["Does we smoke?","Do we smoke?","Do we smokes?","We do smoke?"], 1, "Do + we + smoke."],
+    ["(she / watch documentaries?)", ["Do she watch documentaries?","Does she watches documentaries?","Does she watch documentaries?","She does watch documentaries?"], 2, "Does + she + watch."],
+    ["(they / like comedy shows?)", ["Do they like comedy shows?","Does they like comedy shows?","Do they likes comedy shows?","They do likes comedy shows?"], 0, "Do + they + like."],
+    ["(Carlos / play soccer?)", ["Do Carlos play soccer?","Does Carlos plays soccer?","Does Carlos play soccer?","Carlos do play soccer?"], 2, "Does + Carlos + play."]
+  ],
+  reading: [
+    ["What does Victor check first?", ["The newspaper","The TV guide","His phone","The weather"], 1, "He checks the TV guide."],
+    ["What is the name of the game show?", ["The Big Winner","TV Guide","Popcorn Time","The Last Episode"], 0, "The Big Winner."],
+    ["What is on channel 5?", ["A reality show","A documentary","A talk show","A western"], 0, "A reality show."],
+    ["What time is the sports programme?", ["7:00 p.m.","8:00 p.m.","9:00 p.m.","10:00 p.m."], 2, "9:00 p.m."],
+    ["What do they decide to watch first?", ["The news","The TV series","The game show","The western"], 1, "The TV series."],
+    ["Does Eddy like The Big Winner?", ["Yes, he does.","No, he doesn't.","The text doesn't say.","Only sometimes."], 1, "No, he doesn't."],
+    ["Which programmes are on later?", ["The news and a sports programme","A documentary and a talk show","A comedy and a western","Only a game show"], 0, "The news and a sports programme."],
+    ["What do they prepare?", ["Pizza","Popcorn","Cake","Sandwiches"], 1, "Popcorn."]
+  ]
+};
+
+let extraId = 1000;
+function renderExtraSet(items, containerId, prefix) {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    c.innerHTML = "";
+    items.forEach((item, i) => {
+        const [q, opts, correct, explanation] = item;
+        const id = extraId++;
+        const card = document.createElement("div");
+        card.className = "exercise-card";
+        card.id = `ex-${id}`;
+        let h = `<div class="exercise-title">${prefix}${i+1}</div><p>${q}</p><div class="options-group">`;
+        opts.forEach((o, idx) => {
+            h += `<button class="option-btn" onclick="checkExtra(${id},${idx},${correct},'${explanation.replace(/'/g,"\\'")}')">${o}</button>`;
+        });
+        h += `</div><div class="feedback" id="feedback-${id}"></div>`;
+        card.innerHTML = h;
+        c.appendChild(card);
+    });
+}
+
+function checkExtra(id, selected, correct, explanation) {
+    if (answered[id]) return;
+    const card = document.getElementById(`ex-${id}`);
+    const buttons = card.querySelectorAll(".option-btn");
+    const feedback = document.getElementById(`feedback-${id}`);
+    buttons.forEach(btn => btn.style.pointerEvents = "none");
+    if (selected === correct) {
+        buttons[selected].classList.add("correct");
+        feedback.className = "feedback correct-bg";
+        feedback.innerHTML = `<strong>¡Correcto! 🎉</strong> ${explanation}`;
+    } else {
+        buttons[selected].classList.add("incorrect");
+        buttons[correct].classList.add("correct");
+        feedback.className = "feedback incorrect-bg";
+        feedback.innerHTML = `<strong>Incorrecto. ❌</strong> ${explanation}`;
+    }
+    answered[id] = true;
+}
+
+function renderExtra() {
+    renderExtraSet(extraData.vocab, "extra-vocab", "A");
+    renderExtraSet(extraData.grammar, "extra-grammar", "B");
+    renderExtraSet(extraData.third, "extra-third", "C");
+    renderExtraSet(extraData.questions, "extra-questions", "D");
+    renderExtraSet(extraData.reading, "extra-reading", "E");
+}
+
 </script>
 
 </body>
