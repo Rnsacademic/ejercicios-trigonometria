@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios Interactivos - Trigonometría y Pitágoras</title>
+
+    <!-- Renderizador de ecuaciones matemáticas MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #27ae60;
+            --danger: #e74c3c;
+            --bg: #f4f6f7;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Nav Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Formula & Tip Box */
+        .tip-box {
+            background-color: #eaf2f8;
+            border-left: 5px solid var(--secondary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .formula-card {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        code {
+            background: #eef2f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Visual Diagrams */
+        .diagram-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .diagram-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+            width: 280px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Exercise Styles */
+        .exercise-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .exercise-card.dev-card {
+            border-left: 5px solid #8e44ad;
+        }
+
+        .exercise-title {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #e2e8f0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--secondary);
+            background: #f0f7fc;
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--accent) !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24 !important;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .feedback.correct-bg {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect-bg {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .score-board {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        .btn-reset {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-reset:hover {
+            opacity: 0.9;
+        }
+
+        .exercise-diagram {
+            text-align: center;
+            margin: 15px 0;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .btn-solution {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-solution:hover {
+            background-color: #732d91;
+        }
+
+        .solution-box {
+            display: none;
+            background-color: #f4ecf7;
+            border: 1px solid #d2b4de;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📐 Guía y Ejercicios de Trigonometría</h1>
+
+    <!-- Pestañas de Navegación -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('guia')">Guía & Tips</button>
+        <button class="tab-btn" onclick="openTab('ejercicios')">Práctica (30 Ejercicios)</button>
+    </div>
+
+    <!-- TAB 1: GUÍA Y TIPS -->
+    <div id="guia" class="tab-content active">
+        <h2>¿Cómo saber qué fórmula utilizar?</h2>
+        <p>Aplica este algoritmo de decisión según los datos que te entregue el problema (en un triángulo rectángulo):</p>
+
+        <div class="tip-box">
+            <h3>1. Regla de Oro: Datos conocidos vs. Dato buscado</h3>
+            <ul>
+                <li><strong>Usa PITÁGORAS si:</strong> El problema solo involucra lados (conoces 2 lados y buscas el 3º) y NO se mencionan ángulos agudos.</li>
+                <li><strong>Usa RAZONES TRIGONOMÉTRICAS si:</strong> El problema involucra al menos UN ÁNGULO agudo (ya sea como dato o como la incógnita a buscar).</li>
+            </ul>
+        </div>
+
+        <div class="formula-card">
+            <h3>2. Mnemotecnia: SOH - CAH - TOA y Selección de Catetos</h3>
+            <p>Identifica primero los lados del triángulo rectángulo respecto al ángulo agudo con el que estés trabajando:</p>
+
+            <!-- Diagramas Visuales SVG -->
+            <div class="diagram-container">
+                <div class="diagram-box">
+                    <strong style="color: #2c3e50;">Caso A: Mirando desde α (abajo)</strong>
+                    <svg width="220" height="180" viewBox="0 0 220 180" style="margin-top: 10px;">
+                        <polygon points="30,140 180,140 30,30" fill="#f8f9fa" stroke="#2c3e50" stroke-width="3"/>
+                        <rect x="30" y="125" width="15" height="15" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                        <path d="M 150,140 A 30,30 0 0,0 138,118" fill="none" stroke="#3498db" stroke-width="3"/>
+                        <text x="130" y="133" font-size="14" fill="#3498db" font-weight="bold">α</text>
+                        <text x="5" y="85" font-size="11" fill="#e74c3c" font-weight="bold">Opuesto (CO)</text>
+                        <text x="75" y="160" font-size="11" fill="#27ae60" font-weight="bold">Adyacente (CA)</text>
+                        <text x="110" y="75" font-size="11" fill="#8e44ad" font-weight="bold">Hipotenusa (H)</text>
+                    </svg>
+                </div>
+
+                <div class="diagram-box">
+                    <strong style="color: #2c3e50;">Caso B: Mirando desde β (arriba)</strong>
+                    <svg width="220" height="180" viewBox="0 0 220 180" style="margin-top: 10px;">
+                        <polygon points="30,140 180,140 30,30" fill="#f8f9fa" stroke="#2c3e50" stroke-width="3"/>
+                        <rect x="30" y="125" width="15" height="15" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                        <path d="M 30,60 A 30,30 0 0,0 52,47" fill="none" stroke="#e67e22" stroke-width="3"/>
+                        <text x="42" y="65" font-size="14" fill="#e67e22" font-weight="bold">β</text>
+                        <text x="5" y="85" font-size="11" fill="#27ae60" font-weight="bold">Adyacente (CA)</text>
+                        <text x="75" y="160" font-size="11" fill="#e74c3c" font-weight="bold">Opuesto (CO)</text>
+                        <text x="110" y="75" font-size="11" fill="#8e44ad" font-weight="bold">Hipotenusa (H)</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div style="background-color: #eaf2f8; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                <h4 style="margin-top: 0;">💡 Resumen para definir los lados:</h4>
+                <ul style="line-height: 1.8;">
+                    <li><strong>Hipotenusa (H):</strong> Lado opuesto al ángulo recto (90°). Siempre es el lado más largo del triángulo y nunca cambia de lugar.</li>
+                    <li><strong>Cateto Opuesto (CO):</strong> El lado que está al frente del ángulo de interés (no toca al ángulo).</li>
+                    <li><strong>Cateto Adyacente (CA):</strong> El lado contiguo que ayuda a formar el ángulo junto a la hipotenusa (toca al ángulo).</li>
+                </ul>
+            </div>
+
+            <ul style="line-height: 2.2;">
+                <li><strong>SOH:</strong> &nbsp; <code>Sen(θ) = Cateto Opuesto / Hipotenusa</code></li>
+                <li><strong>CAH:</strong> &nbsp; <code>Cos(θ) = Cateto Adyacente / Hipotenusa</code></li>
+                <li><strong>TOA:</strong> &nbsp; <code>Tan(θ) = Cateto Opuesto / Cateto Adyacente</code></li>
+            </ul>
+        </div>
+
+        <div class="formula-card">
+            <h3>3. Teorema de Pitágoras</h3>
+            <p>Fórmula principal: <code>c² = a² + b²</code> (donde <strong>c</strong> es la Hipotenusa)</p>
+        </div>
+    </div>
+
+    <!-- TAB 2: EJERCICIOS INTERACTIVOS -->
+    <div id="ejercicios" class="tab-content">
+        
+        <div class="score-board">
+            <div>
+                <strong>Puntaje (Selección): </strong><span id="score">0</span> / 28
+            </div>
+            <button class="btn-reset" onclick="resetQuiz()">Reiniciar Ejercicios</button>
+        </div>
+
+        <!-- BANCO DE EJERCICIOS -->
+        <div id="quiz-container"></div>
+
+    </div>
+</div>
+
+<script>
+    // Banco de datos de los 30 ejercicios
+    const exercisesData = [
+        {
+            type: "mc", id: 1, title: "Ejercicio 1: Identificación de Catetos",
+            question: "Observa el triángulo. ¿Cuál es el Cateto Opuesto (CO) y el Cateto Adyacente (CA) respecto a θ?",
+            hasSvg: true, svgType: "angle-bottom",
+            options: ["CO = B, CA = A", "CO = A, CA = B", "CO = C, CA = B", "CO = A, CA = C"],
+            correct: 1, explanation: "El lado A está al frente de θ (Opuesto) y B está junto a θ (Adyacente)."
+        },
+        {
+            type: "mc", id: 2, title: "Ejercicio 2: Selección de Fórmula (Árbol)",
+            question: "Quieres hallar la altura (h) de un árbol. Conoces la distancia a la base (12 m) y el ángulo de elevación (35°). ¿Qué razón debes usar?",
+            hasSvg: true, svgType: "tree",
+            options: ["Seno", "Coseno", "Tangente", "Pitágoras"],
+            correct: 2, explanation: "Relacionas el Cateto Opuesto (h) con el Cateto Adyacente (12 m). Mnemotecnia TOA -> Tangente."
+        },
+        {
+            type: "mc", id: 3, title: "Ejercicio 3: Pitágoras Directo",
+            question: "Un triángulo rectángulo tiene catetos de 6 cm y 8 cm. ¿Cuánto mide su hipotenusa?",
+            hasSvg: false,
+            options: ["10 cm", "14 cm", "48 cm", "12 cm"],
+            correct: 0, explanation: "c = √(6² + 8²) = √(36 + 64) = √100 = 10 cm."
+        },
+        {
+            type: "mc", id: 4, title: "Ejercicio 4: Ángulo Superior",
+            question: "Si el ángulo θ se ubica en el vértice superior, ¿cuál es la razón para calcular la base (x) usando la hipotenusa (15 m)?",
+            hasSvg: true, svgType: "angle-top",
+            options: ["Sen(θ) = x / 15", "Cos(θ) = x / 15", "Tan(θ) = 15 / x", "Sen(θ) = 15 / x"],
+            correct: 0, explanation: "Al estar θ arriba, la base (x) es el Cateto Opuesto. SOH -> Sen(θ) = Opuesto / Hipotenusa."
+        },
+        {
+            type: "mc", id: 5, title: "Ejercicio 5: Razón Coseno",
+            question: "Si en un triángulo conocemos el Cateto Adyacente (5 cm) y la Hipotenusa (13 cm), ¿cuál es el valor de Cos(θ)?",
+            hasSvg: false,
+            options: ["12 / 13", "5 / 13", "5 / 12", "13 / 5"],
+            correct: 1, explanation: "Coseno = Cateto Adyacente / Hipotenusa = 5 / 13."
+        },
+        {
+            type: "mc", id: 6, title: "Ejercicio 6: Encontrar un Cateto con Pitágoras",
+            question: "Un triángulo rectángulo tiene una hipotenusa de 13 cm y un cateto de 5 cm. ¿Cuánto mide el otro cateto?",
+            hasSvg: false,
+            options: ["8 cm", "12 cm", "18 cm", "10 cm"],
+            correct: 1, explanation: "a = √(13² - 5²) = √(169 - 25) = √144 = 12 cm."
+        },
+        {
+            type: "mc", id: 7, title: "Ejercicio 7: Mnemotecnia TOA",
+            question: "¿Qué lados del triángulo rectángulo involucra la Tangente?",
+            hasSvg: false,
+            options: ["Opuesto e Hipotenusa", "Adyacente e Hipotenusa", "Opuesto y Adyacente", "Solo la Hipotenusa"],
+            correct: 2, explanation: "TOA: Tangente = Opuesto / Adyacente."
+        },
+        {
+            type: "mc", id: 8, title: "Ejercicio 8: Rampa de Discapacitados",
+            question: "Una rampa tiene una longitud de 10 m (hipotenusa) y eleva una altura de 2 m (cateto opuesto). ¿Qué razón permite hallar el ángulo de inclinación?",
+            hasSvg: false,
+            options: ["Sen(θ) = 2 / 10", "Cos(θ) = 2 / 10", "Tan(θ) = 10 / 2", "Pitágoras"],
+            correct: 0, explanation: "Tienes Opuesto (2) e Hipotenusa (10), luego Sen(θ) = Opuesto / Hipotenusa."
+        },
+        {
+            type: "mc", id: 9, title: "Ejercicio 9: Sombra de un Edificio",
+            question: "Un edificio proyecta una sombra de 30 m cuando el ángulo de elevación del sol es 60°. Para calcular la altura del edificio usas:",
+            hasSvg: false,
+            options: ["30 · Sen(60°)", "30 · Tan(60°)", "30 / Cos(60°)", "30 + 60"],
+            correct: 1, explanation: "Tan(60°) = h / 30, por lo tanto h = 30 · Tan(60°)."
+        },
+        {
+            type: "mc", id: 10, title: "Ejercicio 10: Cable de Tensión",
+            question: "Un poste de 8 m de alto se sujeta con un cable desde la punta hasta el suelo a 6 m de la base. ¿Cuánto mide el cable?",
+            hasSvg: false,
+            options: ["10 m", "14 m", "2 m", "48 m"],
+            correct: 0, explanation: "El cable es la hipotenusa: c = √(8² + 6²) = √(64 + 36) = √100 = 10 m."
+        },
+        {
+            type: "mc", id: 11, title: "Ejercicio 11: Identificar Hipotenusa",
+            question: "En un triángulo rectángulo ABC, el ángulo recto está en B. ¿Cuál es la hipotenusa?",
+            hasSvg: false,
+            options: ["El lado AB", "El lado BC", "El lado AC", "No se puede saber"],
+            correct: 2, explanation: "La hipotenusa siempre es el lado opuesto al ángulo recto (en este caso el lado AC)."
+        },
+        {
+            type: "mc", id: 12, title: "Ejercicio 12: Valor de Seno en Triángulo 3-4-5",
+            question: "En un triángulo rectángulo con lados 3, 4 y 5, si el cateto opuesto a α mide 3, ¿cuál es Sen(α)?",
+            hasSvg: false,
+            options: ["3 / 4", "4 / 5", "3 / 5", "5 / 3"],
+            correct: 2, explanation: "Seno = Opuesto / Hipotenusa = 3 / 5."
+        },
+        {
+            type: "mc", id: 13, title: "Ejercicio 13: Escalera Apoyada",
+            question: "Una escalera de 5 m está apoyada en una pared. Si la base está a 3 m de la pared, ¿a qué altura llega la escalera?",
+            hasSvg: false,
+            options: ["2 m", "4 m", "8 m", "3.5 m"],
+            correct: 1, explanation: "Altura = √(5² - 3²) = √(25 - 9) = √16 = 4 m."
+        },
+        {
+            type: "mc", id: 14, title: "Ejercicio 14: Razón de Coseno",
+            question: "¿Qué razón trigonométrica relaciona el Cateto Adyacente y la Hipotenusa?",
+            hasSvg: false,
+            options: ["Seno", "Coseno", "Tangente", "Cotangente"],
+            correct: 1, explanation: "CAH: Coseno = Adyacente / Hipotenusa."
+        },
+        {
+            type: "mc", id: 15, title: "Ejercicio 15: Ángulos Complementarios",
+            question: "En un triángulo rectángulo, los dos ángulos agudos suman siempre:",
+            hasSvg: false,
+            options: ["180°", "45°", "90°", "360°"],
+            correct: 2, explanation: "Como el ángulo recto mide 90°, los otros dos ángulos agudos deben sumar 90°."
+        },
+        {
+            type: "mc", id: 16, title: "Ejercicio 16: Tangente de 45°",
+            question: "Si un triángulo rectángulo isósceles tiene catetos iguales a 7 cm, ¿cuánto vale Tan(45°)?",
+            hasSvg: false,
+            options: ["0.5", "1", "7", "√2"],
+            correct: 1, explanation: "Tan(45°) = Cateto Opuesto / Cateto Adyacente = 7 / 7 = 1."
+        },
+        {
+            type: "mc", id: 17, title: "Ejercicio 17: Selección Método",
+            question: "Conoces la medida de la hipotenusa y un ángulo agudo. Buscas el cateto opuesto. Usas:",
+            hasSvg: false,
+            options: ["Pitágoras", "Seno", "Coseno", "Tangente"],
+            correct: 1, explanation: "SOH relaciona el Opuesto buscado con la Hipotenusa conocida."
+        },
+        {
+            type: "mc", id: 18, title: "Ejercicio 18: Selección Método II",
+            question: "Conoces los dos catetos y buscas el ángulo agudo. Usas la función inversa de:",
+            hasSvg: false,
+            options: ["Seno", "Coseno", "Tangente", "Pitágoras"],
+            correct: 2, explanation: "TOA relaciona ambos catetos. Para hallar el ángulo usas Tan⁻¹(CO/CA)."
+        },
+        {
+            type: "mc", id: 19, title: "Ejercicio 19: Triángulo rectángulo con Lados 9, 12, 15",
+            question: "¿Cuál es el valor de Cos(θ) si el cateto adyacente es 12 y la hipotenusa es 15?",
+            hasSvg: false,
+            options: ["9 / 15", "12 / 15", "9 / 12", "15 / 12"],
+            correct: 1, explanation: "Coseno = Adyacente / Hipotenusa = 12 / 15 (Simplificado 4/5)."
+        },
+        {
+            type: "mc", id: 20, title: "Ejercicio 20: Diagonal de un Rectángulo",
+            question: "Un rectángulo mide 12 cm de base y 5 cm de altura. ¿Cuánto mide su diagonal?",
+            hasSvg: false,
+            options: ["17 cm", "13 cm", "7 cm", "169 cm"],
+            correct: 1, explanation: "La diagonal forma la hipotenusa: d = √(12² + 5²) = √(144 + 25) = √169 = 13 cm."
+        },
+        {
+            type: "mc", id: 21, title: "Ejercicio 21: Interpretación Visual",
+            question: "Si en un triángulo rectángulo el Cateto Opuesto es igual al Cateto Adyacente, ¿cuánto miden sus ángulos agudos?",
+            hasSvg: false,
+            options: ["30° y 60°", "45° y 45°", "20° y 70°", "60° y 60°"],
+            correct: 1, explanation: "Al ser catetos iguales, es un triángulo isósceles y sus ángulos agudos miden 45° cada uno."
+        },
+        {
+            type: "mc", id: 22, title: "Ejercicio 22: Despeje de Hipotenusa",
+            question: "Si Sen(30°) = 0.5 y el Cateto Opuesto mide 10 m, ¿cuánto mide la Hipotenusa?",
+            hasSvg: false,
+            options: ["5 m", "20 m", "15 m", "10 m"],
+            correct: 1, explanation: "Sen(30°) = Opuesto / H => 0.5 = 10 / H => H = 10 / 0.5 = 20 m."
+        },
+        {
+            type: "mc", id: 23, title: "Ejercicio 23: Despeje de Cateto Adyacente",
+            question: "Si Cos(60°) = 0.5 y la Hipotenusa mide 18 cm, ¿cuánto mide el Cateto Adyacente?",
+            hasSvg: false,
+            options: ["9 cm", "36 cm", "4.5 cm", "12 cm"],
+            correct: 0, explanation: "Cos(60°) = CA / H => 0.5 = CA / 18 => CA = 18 · 0.5 = 9 cm."
+        },
+        {
+            type: "mc", id: 24, title: "Ejercicio 24: Comprobación de Triángulo Rectángulo",
+            question: "¿Cuál de los siguientes trios de números forma un triángulo rectángulo?",
+            hasSvg: false,
+            options: ["2, 3, 4", "7, 24, 25", "5, 6, 7", "8, 9, 10"],
+            correct: 1, explanation: "Cumple Pitágoras: 7² + 24² = 49 + 576 = 625 = 25²."
+        },
+        {
+            type: "mc", id: 25, title: "Ejercicio 25: Cometa en el Aire",
+            question: "Un cometa tiene 50 m de hilo desplegado (hipotenusa). El ángulo con el suelo es 40°. Para calcular la altura del cometa usas:",
+            hasSvg: false,
+            options: ["50 · Sen(40°)", "50 · Cos(40°)", "50 · Tan(40°)", "50 / 40"],
+            correct: 0, explanation: "Sen(40°) = Altura / 50 => Altura = 50 · Sen(40°)."
+        },
+        {
+            type: "mc", id: 26, title: "Ejercicio 26: Relación SOH-CAH-TOA",
+            question: "Si conocemos Sen(θ) = 3/5 y Cos(θ) = 4/5, ¿cuánto vale Tan(θ)?",
+            hasSvg: false,
+            options: ["3 / 4", "4 / 3", "5 / 3", "3 / 5"],
+            correct: 0, explanation: "Tan(θ) = Sen(θ) / Cos(θ) = (3/5) / (4/5) = 3/4."
+        },
+        {
+            type: "mc", id: 27, title: "Ejercicio 27: Triángulo Invertido",
+            question: "En un triángulo rectángulo donde el ángulo recto está arriba y la base es la hipotenusa, las reglas SOH-CAH-TOA:",
+            hasSvg: false,
+            options: ["Ya no funcionan", "Siguen funcionando exactamente igual", "Solo funciona Pitágoras", "Cambian los signos"],
+            correct: 1, explanation: "Las definiciones de opuesto, adyacente e hipotenusa dependen de la posición relativa del ángulo, no de la orientación del triángulo."
+        },
+        {
+            type: "mc", id: 28, title: "Ejercicio 28: Cálculo Rápido de Tangente",
+            question: "Si el Cateto Opuesto es 9 y el Cateto Adyacente es 3, Tan(θ) es igual a:",
+            hasSvg: false,
+            options: ["3", "1/3", "27", "6"],
+            correct: 0, explanation: "Tan(θ) = Opuesto / Adyacente = 9 / 3 = 3."
+        },
+        {
+            type: "dev", id: 29, title: "Ejercicio 29 (Desarrollo): Problema del Faro",
+            question: "Un observador en la cima de un faro de 40 m de altura divisa un barco en el mar con un ángulo de depresión de 30°. ¿A qué distancia se encuentra el barco de la base del faro?",
+            solutionSteps: [
+                "<b>Paso 1: Identificar datos.</b> El ángulo de depresión desde la cima es igual al ángulo de elevación desde el barco (30°). La altura del faro es el <i>Cateto Opuesto</i> (40 m). La distancia buscada es el <i>Cateto Adyacente</i> (x).",
+                "<b>Paso 2: Seleccionar la razón trigonométrica.</b> Relacionamos Opuesto y Adyacente mediante Tangente (TOA):<br><code>Tan(30°) = Cateto Opuesto / Cateto Adyacente</code>",
+                "<b>Paso 3: Sustituir y despejar x.</b><br><code>Tan(30°) = 40 / x</code> &rarr; <code>x = 40 / Tan(30°)</code>",
+                "<b>Paso 4: Calcular el resultado.</b> Como Tan(30°) ≈ 0.5773:<br><code>x = 40 / 0.5773 ≈ 69.28 metros</code>",
+                "<b>Respuesta Final:</b> El barco se encuentra a aproximadamente <b>69.28 metros</b> de la base del faro."
+            ]
+        },
+        {
+            type: "dev", id: 30, title: "Ejercicio 30 (Desarrollo): Cable de Antena con Ángulo",
+            question: "Se quiere colocar un cable de retención desde la parte superior de una antena de 15 m de altura hasta un punto en el suelo, de modo que el cable forme un ángulo de 60° con el suelo. Calcula la longitud total del cable necesario.",
+            solutionSteps: [
+                "<b>Paso 1: Identificar datos.</b> La altura de la antena es el <i>Cateto Opuesto</i> (15 m). El cable es la <i>Hipotenusa</i> (L). El ángulo con el suelo es 60°.",
+                "<b>Paso 2: Seleccionar la razón trigonométrica.</b> Relacionamos Opuesto e Hipotenusa mediante Seno (SOH):<br><code>Sen(60°) = Cateto Opuesto / Hipotenusa</code>",
+                "<b>Paso 3: Sustituir y despejar L.</b><br><code>Sen(60°) = 15 / L</code> &rarr; <code>L = 15 / Sen(60°)</code>",
+                "<b>Paso 4: Calcular el resultado.</b> Como Sen(60°) ≈ 0.8660:<br><code>L = 15 / 0.8660 ≈ 17.32 metros</code>",
+                "<b>Respuesta Final:</b> Se necesitan exactamente <b>17.32 metros</b> de cable."
+            ]
+        }
+    ];
+
+    let score = 0;
+    const answeredState = {};
+
+    function renderQuiz() {
+        const container = document.getElementById("quiz-container");
+        container.innerHTML = "";
+
+        exercisesData.forEach(ex => {
+            const card = document.createElement("div");
+            card.className = `exercise-card ${ex.type === 'dev' ? 'dev-card' : ''}`;
+            card.id = `ex-${ex.id}`;
+
+            let content = `<div class="exercise-title">${ex.title}</div><p>${ex.question}</p>`;
+
+            // Agregar gráficos SVG si corresponde
+            if (ex.hasSvg) {
+                content += generateSvgMarkup(ex.svgType);
+            }
+
+            // Tipo Selección Única
+            if (ex.type === "mc") {
+                content += `<div class="options-group">`;
+                ex.options.forEach((opt, idx) => {
+                    content += `<button class="option-btn" onclick="checkAnswer(${ex.id}, ${idx})">${opt}</button>`;
+                });
+                content += `</div><div class="feedback" id="feedback-${ex.id}"></div>`;
+            } 
+            // Tipo Desarrollo
+            else if (ex.type === "dev") {
+                content += `
+                    <button class="btn-solution" onclick="toggleSolution(${ex.id})">👁️ Ver Solución Paso a Paso</button>
+                    <div class="solution-box" id="solution-${ex.id}">
+                        <h4>Solución Detallada:</h4>
+                        <ul>${ex.solutionSteps.map(step => `<li style="margin-bottom: 8px;">${step}</li>`).join('')}</ul>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = content;
+            container.appendChild(card);
+        });
+
+        if (window.MathJax) {
+            MathJax.typesetPromise();
+        }
+    }
+
+    function generateSvgMarkup(type) {
+        if (type === "angle-bottom") {
+            return `
+            <div class="exercise-diagram">
+                <svg width="240" height="150" viewBox="0 0 240 150">
+                    <polygon points="40,120 200,120 40,20" fill="#f8f9fa" stroke="#2c3e50" stroke-width="3"/>
+                    <rect x="40" y="105" width="15" height="15" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                    <path d="M 170,120 A 30,30 0 0,0 158,98" fill="none" stroke="#3498db" stroke-width="3"/>
+                    <text x="148" y="113" font-size="14" fill="#3498db" font-weight="bold">θ</text>
+                    <text x="20" y="75" font-size="13" fill="#2c3e50" font-weight="bold">A</text>
+                    <text x="115" y="140" font-size="13" fill="#2c3e50" font-weight="bold">B</text>
+                    <text x="125" y="60" font-size="13" fill="#8e44ad" font-weight="bold">C</text>
+                </svg>
+            </div>`;
+        } else if (type === "tree") {
+            return `
+            <div class="exercise-diagram">
+                <svg width="260" height="140" viewBox="0 0 260 140">
+                    <polygon points="40,110 220,110 40,20" fill="#eaf2f8" stroke="#2c3e50" stroke-width="2" stroke-dasharray="4"/>
+                    <line x1="40" y1="20" x2="40" y2="110" stroke="#e74c3c" stroke-width="4"/>
+                    <path d="M 190,110 A 30,30 0 0,0 178,88" fill="none" stroke="#3498db" stroke-width="3"/>
+                    <text x="165" y="103" font-size="13" fill="#3498db" font-weight="bold">35°</text>
+                    <text x="15" y="70" font-size="13" fill="#e74c3c" font-weight="bold">h = ?</text>
+                    <text x="110" y="130" font-size="13" fill="#27ae60" font-weight="bold">12 m</text>
+                </svg>
+            </div>`;
+        } else if (type === "angle-top") {
+            return `
+            <div class="exercise-diagram">
+                <svg width="220" height="150" viewBox="0 0 220 150">
+                    <polygon points="50,120 190,120 50,20" fill="#f8f9fa" stroke="#2c3e50" stroke-width="3"/>
+                    <rect x="50" y="105" width="15" height="15" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                    <path d="M 50,50 A 30,30 0 0,0 72,37" fill="none" stroke="#e67e22" stroke-width="3"/>
+                    <text x="62" y="55" font-size="14" fill="#e67e22" font-weight="bold">θ</text>
+                    <text x="110" y="140" font-size="13" fill="#e74c3c" font-weight="bold">x (base)</text>
+                    <text x="130" y="65" font-size="13" fill="#8e44ad" font-weight="bold">15 m</text>
+                </svg>
+            </div>`;
+        }
+        return '';
+    }
+
+    function checkAnswer(exId, selectedIdx) {
+        if (answeredState[exId]) return;
+
+        const ex = exercisesData.find(e => e.id === exId);
+        const card = document.getElementById(`ex-${exId}`);
+        const buttons = card.querySelectorAll('.option-btn');
+        const feedback = document.getElementById(`feedback-${exId}`);
+
+        buttons.forEach(btn => btn.style.pointerEvents = 'none');
+
+        if (selectedIdx === ex.correct) {
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = "feedback correct-bg";
+            feedback.innerHTML = `<strong>¡Correcto! 🎉</strong> ${ex.explanation}`;
+            score++;
+            document.getElementById('score').innerText = score;
+        } else {
+            buttons[selectedIdx].classList.add('incorrect');
+            buttons[ex.correct].classList.add('correct');
+            feedback.className = "feedback incorrect-bg";
+            feedback.innerHTML = `<strong>Incorrecto. ❌</strong> ${ex.explanation}`;
+        }
+
+        feedback.style.display = "block";
+        answeredState[exId] = true;
+    }
+
+    function toggleSolution(exId) {
+        const box = document.getElementById(`solution-${exId}`);
+        if (box.style.display === "block") {
+            box.style.display = "none";
+        } else {
+            box.style.display = "block";
+        }
+    }
+
+    function resetQuiz() {
+        score = 0;
+        document.getElementById('score').innerText = score;
+        for (let key in answeredState) {
+            delete answeredState[key];
+        }
+        renderQuiz();
+    }
+
+    function openTab(tabName) {
+        let tabContent = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContent.length; i++) {
+            tabContent[i].classList.remove("active");
+        }
+        let tabBtns = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < tabBtns.length; i++) {
+            tabBtns[i].classList.remove("active");
+        }
+        document.getElementById(tabName).classList.add("active");
+        event.currentTarget.classList.add("active");
+    }
+
+    // Inicializar los ejercicios al cargar la página
+    window.onload = function() {
+        renderQuiz();
+    };
+</script>
+
+</body>
+</html>
