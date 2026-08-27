@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inglés 9.º - Práctica Interactiva</title>
+
+    <style>
+        :root {
+            --primary: #1f4e79;
+            --secondary: #3498db;
+            --accent: #27ae60;
+            --danger: #e74c3c;
+            --bg: #f4f6f8;
+            --card: #ffffff;
+            --warning: #f39c12;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 0 20px 40px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1f4e79, #2f80c9);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(0,0,0,.12);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            color: #e8f1f8;
+        }
+
+        .back {
+            display: inline-block;
+            margin: 18px 0;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            border-bottom: 2px solid #d8dee6;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 12px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            font-size: 15px;
+        }
+
+        .tab-btn.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            border: 1px solid #e3e8ee;
+        }
+
+        .tip {
+            background: #eaf3fb;
+            border-left: 5px solid var(--secondary);
+        }
+
+        h2, h3 { color: var(--primary); }
+
+        .score-board {
+            background: var(--primary);
+            color: white;
+            padding: 15px 18px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            position: sticky;
+            top: 10px;
+            z-index: 10;
+            margin-bottom: 20px;
+        }
+
+        .btn-reset, .btn-solution {
+            border: none;
+            border-radius: 7px;
+            padding: 9px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .btn-reset { background: var(--secondary); }
+        .btn-solution { background: #8e44ad; margin-top: 10px; }
+
+        .exercise-card {
+            background: white;
+            border: 1px solid #e1e7ed;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .exercise-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            margin-top: 14px;
+        }
+
+        .option-btn {
+            background: #fafbfc;
+            border: 2px solid #dfe5eb;
+            padding: 11px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--secondary);
+            background: #f3f8fc;
+        }
+
+        .option-btn.correct {
+            background: #d4edda !important;
+            border-color: var(--accent) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .option-btn.incorrect {
+            background: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+
+        .feedback {
+            display: none;
+            margin-top: 12px;
+            padding: 11px;
+            border-radius: 7px;
+            line-height: 1.5;
+        }
+
+        .feedback.correct-bg {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect-bg {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .reading {
+            background: #f8fbfd;
+            border-left: 5px solid var(--secondary);
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        .solution-box {
+            display: none;
+            margin-top: 12px;
+            background: #f6eef9;
+            border: 1px solid #d4b9df;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            border: 1px solid #cdd5dd;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            resize: vertical;
+        }
+
+        .rubric {
+            margin-top: 15px;
+            background: #fff7e6;
+            border-left: 5px solid var(--warning);
+            padding: 14px;
+            border-radius: 7px;
+        }
+
+        .small-note {
+            color: #697783;
+            font-size: 14px;
+        }
+
+        @media (max-width: 650px) {
+            header h1 { font-size: 26px; }
+            .score-board { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🇺🇸 Inglés 9.º</h1>
+        <p>TV Shows · Reading Comprehension · Simple Present · DO / DOES</p>
+    </header>
+
+    <a class="back" href="index.html">← Volver al menú principal</a>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('guia', this)">Guía de estudio</button>
+        <button class="tab-btn" onclick="openTab('practica', this)">Práctica interactiva</button>
+        <button class="tab-btn" onclick="openTab('desarrollo', this)">Respuesta corta y desarrollo</button>
+    </div>
+
+    <section id="guia" class="tab-content active">
+        <div class="card tip">
+            <h2>1. TV Shows</h2>
+            <p><strong>News:</strong> noticias.</p>
+            <p><strong>Game show:</strong> concurso de preguntas o retos.</p>
+            <p><strong>Sitcom:</strong> serie de comedia sobre situaciones cotidianas.</p>
+            <p><strong>Documentary:</strong> programa informativo sobre hechos reales.</p>
+            <p><strong>Talent show:</strong> competencia de canto, baile u otros talentos.</p>
+            <p><strong>Cartoon:</strong> programa animado.</p>
+            <p><strong>Reality show:</strong> programa con personas reales en situaciones no guionadas.</p>
+            <p><strong>Weather report:</strong> reporte del clima.</p>
+            <p><strong>Sports show:</strong> programa deportivo.</p>
+            <p><strong>Soap opera:</strong> serie dramática sobre relaciones y problemas familiares.</p>
+        </div>
+
+        <div class="card">
+            <h2>2. Simple Present</h2>
+            <p><strong>I / You / We / They</strong> → verbo en forma base.</p>
+            <p>Example: <em>They watch TV on Fridays.</em></p>
+            <p><strong>He / She / It</strong> → normalmente se agrega <strong>-s</strong> o <strong>-es</strong>.</p>
+            <p>Example: <em>She watches the news.</em></p>
+        </div>
+
+        <div class="card">
+            <h2>3. Negative Form</h2>
+            <p><strong>I / You / We / They</strong> → <strong>don't + verb</strong></p>
+            <p><em>They don't watch reality shows.</em></p>
+            <p><strong>He / She / It</strong> → <strong>doesn't + verb</strong></p>
+            <p><em>He doesn't like cartoons.</em></p>
+            <p class="small-note">Después de doesn't, el verbo vuelve a su forma base: <strong>doesn't like</strong>, no <strong>doesn't likes</strong>.</p>
+        </div>
+
+        <div class="card">
+            <h2>4. Questions with DO / DOES</h2>
+            <p><strong>Do</strong> + I / you / we / they + verb...?</p>
+            <p><em>Do you like documentaries?</em></p>
+            <p><strong>Does</strong> + he / she / it + verb...?</p>
+            <p><em>Does Maria watch the news?</em></p>
+        </div>
+    </section>
+
+    <section id="practica" class="tab-content">
+        <div class="score-board">
+            <div><strong>Puntaje:</strong> <span id="score">0</span> / <span id="total">20</span></div>
+            <button class="btn-reset" onclick="resetQuiz()">Reiniciar práctica</button>
+        </div>
+
+        <div id="quiz-container"></div>
+    </section>
+
+    <section id="desarrollo" class="tab-content">
+        <div class="card">
+            <h2>Respuesta corta</h2>
+            <p><strong>What kind of TV shows do you like and why?</strong></p>
+            <textarea placeholder="Write your answer here..."></textarea>
+            <button class="btn-solution" onclick="toggleSolution('short-answer')">👁️ Ver respuesta sugerida</button>
+            <div class="solution-box" id="short-answer">
+                <strong>Example:</strong> I like documentaries because I learn new things about animals and nature.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Desarrollo</h2>
+            <p>
+                Write <strong>6 to 8 sentences</strong> about your favorite TV show or movie.
+                Include the name, type, characters, when you watch it, why you like it and your personal opinion.
+                Use the <strong>Simple Present</strong>.
+            </p>
+
+            <textarea style="min-height:220px" placeholder="Write 6 to 8 sentences..."></textarea>
+
+            <div class="rubric">
+                <strong>Rúbrica sugerida (10 puntos)</strong>
+                <ul>
+                    <li>Contenido completo: 4 pts</li>
+                    <li>Uso correcto de Simple Present: 3 pts</li>
+                    <li>Vocabulario del tema: 2 pts</li>
+                    <li>Mayúsculas y puntuación: 1 pt</li>
+                </ul>
+            </div>
+
+            <button class="btn-solution" onclick="toggleSolution('writing-answer')">👁️ Ver ejemplo de respuesta</button>
+            <div class="solution-box" id="writing-answer">
+                My favorite TV show is <em>Planet Adventures</em>. It is a documentary about nature.
+                The program shows animals from different countries. I watch it on Saturday evenings.
+                My family sometimes watches it with me. I like the show because it is interesting and educational.
+                It teaches me new facts about the planet. I think it is an excellent TV show.
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+const exercisesData = [
+    {
+        id: 1,
+        title: "TV Shows",
+        question: "A program where people answer questions to win money.",
+        options: ["News", "Game show", "Documentary", "Cartoon"],
+        correct: 1,
+        explanation: "A game show usually includes questions, challenges or competitions."
+    },
+    {
+        id: 2,
+        title: "TV Shows",
+        question: "A program that tells you about important events happening in the world.",
+        options: ["News", "Sitcom", "Sports show", "Talent show"],
+        correct: 0,
+        explanation: "News programs report current events."
+    },
+    {
+        id: 3,
+        title: "TV Shows",
+        question: "A funny television series about everyday situations.",
+        options: ["Documentary", "Sitcom", "News", "Game show"],
+        correct: 1,
+        explanation: "A sitcom is a comedy series based on everyday situations."
+    },
+    {
+        id: 4,
+        title: "TV Shows",
+        question: "A program that gives real information about animals, history, nature or science.",
+        options: ["Documentary", "Soap opera", "Cartoon", "Reality show"],
+        correct: 0,
+        explanation: "A documentary presents factual information about real topics."
+    },
+    {
+        id: 5,
+        title: "TV Shows",
+        question: "A program in which singers, dancers or other performers compete.",
+        options: ["Talent show", "Weather report", "News", "Documentary"],
+        correct: 0,
+        explanation: "A talent show is a competition where people perform different talents."
+    },
+    {
+        id: 6,
+        title: "Simple Present",
+        question: "My brother ______ TV after dinner.",
+        options: ["watch", "watches", "watching", "watched"],
+        correct: 1,
+        explanation: "With he/she/it, we normally add -s or -es: watches."
+    },
+    {
+        id: 7,
+        title: "Simple Present",
+        question: "Sara ______ comedies.",
+        options: ["like", "likes", "liking", "liked"],
+        correct: 1,
+        explanation: "Sara = she, so we use likes."
+    },
+    {
+        id: 8,
+        title: "Simple Present",
+        question: "We ______ documentaries at school.",
+        options: ["study", "studies", "studying", "studied"],
+        correct: 0,
+        explanation: "With we, use the base form: study."
+    },
+    {
+        id: 9,
+        title: "Simple Present",
+        question: "The program ______ at 8:00 p.m.",
+        options: ["start", "starts", "starting", "started"],
+        correct: 1,
+        explanation: "The program = it, so we use starts."
+    },
+    {
+        id: 10,
+        title: "Negative Form",
+        question: "Choose the correct negative form: He likes reality shows.",
+        options: [
+            "He don't like reality shows.",
+            "He doesn't likes reality shows.",
+            "He doesn't like reality shows.",
+            "He not likes reality shows."
+        ],
+        correct: 2,
+        explanation: "With he, use doesn't + base verb: doesn't like."
+    },
+    {
+        id: 11,
+        title: "Negative Form",
+        question: "Choose the correct negative form: They watch the news every morning.",
+        options: [
+            "They doesn't watch the news every morning.",
+            "They don't watch the news every morning.",
+            "They don't watches the news every morning.",
+            "They not watch the news every morning."
+        ],
+        correct: 1,
+        explanation: "With they, use don't + base verb."
+    },
+    {
+        id: 12,
+        title: "DO or DOES",
+        question: "______ you like cartoons?",
+        options: ["Do", "Does", "Is", "Are"],
+        correct: 0,
+        explanation: "Use Do with you."
+    },
+    {
+        id: 13,
+        title: "DO or DOES",
+        question: "______ your mother watch the news?",
+        options: ["Do", "Does", "Is", "Are"],
+        correct: 1,
+        explanation: "Your mother = she, so use Does."
+    },
+    {
+        id: 14,
+        title: "DO or DOES",
+        question: "______ they enjoy sports shows?",
+        options: ["Do", "Does", "Is", "Has"],
+        correct: 0,
+        explanation: "Use Do with they."
+    },
+    {
+        id: 15,
+        title: "DO or DOES",
+        question: "______ Carlos study English every day?",
+        options: ["Do", "Does", "Did", "Has"],
+        correct: 1,
+        explanation: "Carlos = he, so use Does."
+    },
+    {
+        id: 16,
+        title: "Reading Comprehension",
+        passage: "Daniel is fourteen years old. His favorite TV show is Planet Adventures, a documentary series about nature and animals. It is on TV every Saturday at 7:00 p.m. Daniel watches it with his sister. He likes the show because he learns interesting facts about oceans, forests and wild animals. His sister prefers cartoons, but she sometimes watches the documentary with him. Daniel does not watch TV every day because he has homework and soccer practice during the week.",
+        question: "How old is Daniel?",
+        options: ["Twelve", "Thirteen", "Fourteen", "Fifteen"],
+        correct: 2,
+        explanation: "The text says Daniel is fourteen years old."
+    },
+    {
+        id: 17,
+        title: "Reading Comprehension",
+        question: "What type of TV show is Planet Adventures?",
+        options: ["A sitcom", "A documentary", "A game show", "A soap opera"],
+        correct: 1,
+        explanation: "The text describes it as a documentary series."
+    },
+    {
+        id: 18,
+        title: "Reading Comprehension",
+        question: "When does Daniel watch the show?",
+        options: ["Every Friday at 8:00 p.m.", "Every Saturday at 7:00 p.m.", "Every Sunday morning", "Every day after school"],
+        correct: 1,
+        explanation: "The show is on every Saturday at 7:00 p.m."
+    },
+    {
+        id: 19,
+        title: "Reading Comprehension",
+        question: "Why does Daniel like the show?",
+        options: [
+            "Because it is funny.",
+            "Because his sister likes it.",
+            "Because he learns interesting facts.",
+            "Because it is a game show."
+        ],
+        correct: 2,
+        explanation: "He likes it because he learns interesting facts about nature and animals."
+    },
+    {
+        id: 20,
+        title: "Reading Comprehension",
+        question: "Does Daniel watch TV every day?",
+        options: [
+            "Yes, he does.",
+            "No, he doesn't.",
+            "Only in the morning.",
+            "The text does not say."
+        ],
+        correct: 1,
+        explanation: "No. He has homework and soccer practice during the week."
+    }
+];
+
+let score = 0;
+const answered = {};
+
+function renderQuiz() {
+    const container = document.getElementById("quiz-container");
+    container.innerHTML = "";
+    document.getElementById("total").innerText = exercisesData.length;
+
+    let readingShown = false;
+
+    exercisesData.forEach(ex => {
+        const card = document.createElement("div");
+        card.className = "exercise-card";
+
+        let content = `<div class="exercise-title">Ejercicio ${ex.id}: ${ex.title}</div>`;
+
+        if (ex.passage && !readingShown) {
+            content += `<div class="reading"><strong>Reading:</strong><br><br>${ex.passage}</div>`;
+            readingShown = true;
+        }
+
+        content += `<p>${ex.question}</p><div class="options-group">`;
+
+        ex.options.forEach((opt, idx) => {
+            content += `<button class="option-btn" onclick="checkAnswer(${ex.id}, ${idx})">${opt}</button>`;
+        });
+
+        content += `</div><div class="feedback" id="feedback-${ex.id}"></div>`;
+        card.innerHTML = content;
+        card.id = `ex-${ex.id}`;
+        container.appendChild(card);
+    });
+}
+
+function checkAnswer(id, selected) {
+    if (answered[id]) return;
+
+    const ex = exercisesData.find(x => x.id === id);
+    const card = document.getElementById(`ex-${id}`);
+    const buttons = card.querySelectorAll(".option-btn");
+    const feedback = document.getElementById(`feedback-${id}`);
+
+    buttons.forEach(btn => btn.style.pointerEvents = "none");
+
+    if (selected === ex.correct) {
+        buttons[selected].classList.add("correct");
+        feedback.className = "feedback correct-bg";
+        feedback.innerHTML = `<strong>¡Correcto! 🎉</strong> ${ex.explanation}`;
+        score++;
+        document.getElementById("score").innerText = score;
+    } else {
+        buttons[selected].classList.add("incorrect");
+        buttons[ex.correct].classList.add("correct");
+        feedback.className = "feedback incorrect-bg";
+        feedback.innerHTML = `<strong>Incorrecto. ❌</strong> ${ex.explanation}`;
+    }
+
+    answered[id] = true;
+}
+
+function resetQuiz() {
+    score = 0;
+    document.getElementById("score").innerText = score;
+    Object.keys(answered).forEach(k => delete answered[k]);
+    renderQuiz();
+}
+
+function toggleSolution(id) {
+    const box = document.getElementById(id);
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function openTab(tabName, button) {
+    document.querySelectorAll(".tab-content").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(x => x.classList.remove("active"));
+
+    document.getElementById(tabName).classList.add("active");
+    button.classList.add("active");
+}
+
+window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
